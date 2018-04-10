@@ -20,7 +20,11 @@ public class LifeCycleActivity extends AppCompatActivity {
         new LifeCycleEventLogger(this);
     }
 
-    static class LifeCycleEventLogger implements LifecycleObserver {
+    public void onEventChanged(String content) {
+        ((TextView) findViewById(R.id.event)).setText(content);
+    }
+
+    class LifeCycleEventLogger implements LifecycleObserver {
 
         private final LifecycleOwner lifecycleOwner;
 
@@ -32,7 +36,9 @@ public class LifeCycleActivity extends AppCompatActivity {
 
         @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
         void logEvent() {
-            Log.d("EventLogger", "ANY: " + String.valueOf(lifecycleOwner.getLifecycle().getCurrentState()));
+            String event = String.valueOf(lifecycleOwner.getLifecycle().getCurrentState());
+            Log.d("EventLogger", "ANY: " + event);
+            onEventChanged(event);
         }
 
         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -65,4 +71,5 @@ public class LifeCycleActivity extends AppCompatActivity {
             Log.d("EventLogger", "STOP");
         }
     }
+
 }
